@@ -15,6 +15,16 @@ view: users {
     type: string
     sql: ${TABLE}.city ;;
   }
+
+  dimension: city_link {
+    type: string
+    sql: ${TABLE}.city ;;
+    link: {
+      label: "Search the web"
+      url: "http://www.google.com/search?q={{ value | url_encode }}"
+      icon_url: "http://www.google.com/s2/favicons?domain=www.{{ value | url_encode }}.com"
+    }
+  }
   dimension: country {
     type: string
     map_layer_name: countries
@@ -57,6 +67,16 @@ view: users {
     type: string
     sql: ${TABLE}.state ;;
   }
+  dimension: state_link {
+    type: string
+    sql: ${TABLE}.state ;;
+    map_layer_name: us_states
+    html: {% if _explore._name == "order_items" %}
+          <a href="/explore/training_ecommerce/order_items?fields=order_items.detail*&f[users.state]= {{ value }}">{{ value }}</a>
+        {% else %}
+          <a href="/explore/training_ecommerce/users?fields=users.detail*&f[users.state]={{ value }}">{{ value }}</a>
+        {% endif %} ;;
+  }
   dimension: street_address {
     type: string
     sql: ${TABLE}.street_address ;;
@@ -77,13 +97,13 @@ view: users {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-	id,
-	last_name,
-	first_name,
-	events.count,
-	orders.count,
-	order_items.count
-	]
+  id,
+  last_name,
+  first_name,
+  events.count,
+  orders.count,
+  order_items.count
+  ]
   }
 
 }
