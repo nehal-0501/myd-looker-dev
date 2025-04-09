@@ -87,7 +87,7 @@ view: mart_zendesk_ticket_call_and_cost {
                HOUR
              )
            ELSE NULL
-      END
+         END ;;
     description: "Calculates the time difference in hours between ticket creation and first public reply for valid tickets."
     value_format_name: decimal_0 # Optional: Formats the number as an integer
   }
