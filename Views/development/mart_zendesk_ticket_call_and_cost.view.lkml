@@ -80,7 +80,12 @@ view: mart_zendesk_ticket_call_and_cost {
   measure: first_response_hours {
     type: number
     sql: CASE
-           WHEN ${cal_ticket_valid} = TRUE AND ${first_public_reply_at} IS NOT NULL THEN DATETIME_DIFF(${first_public_reply_at}, ${ticket_created_at}, HOUR)
+           WHEN ${cal_ticket_valid} = TRUE AND ${first_public_reply_at} IS NOT NULL THEN
+             DATETIME_DIFF(
+               CAST(${first_public_reply_at} AS TIMESTAMP),
+               CAST(${ticket_created_at} AS TIMESTAMP),
+               HOUR
+             )
            ELSE NULL
          END ;;
     description: "Calculates the time difference in hours between ticket creation and first public reply for valid tickets."
