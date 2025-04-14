@@ -136,15 +136,11 @@ view: mart_zendesk_ticket_call_and_cost {
 
   measure: average_first_response_hours {
     type: average
-    sql: CASE
-          WHEN ${cal_ticket_valid} = TRUE AND ${first_public_reply_at} IS NOT NULL
-          THEN TIMESTAMP_DIFF(
+    sql:  TIMESTAMP_DIFF(
             ${first_public_reply_at},
             ${ticket_created_at},
             HOUR
-          )
-          ELSE NULL
-        END ;;
+          );;
     # value_format: "#.00"  # Optional: Formats the output to 2 decimal places
     description: "Average number of hours for the first response (considering valid tickets and first reply)."
   }
