@@ -32,8 +32,13 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   dimension: ticket_created_at {
-    type: date_time
+    type: string
     sql: ${TABLE}.ticket_created_at ;;
+  }
+
+  dimension: first_public_reply_at {
+    type: string
+    sql: ${TABLE}.first_public_reply_at ;;
   }
 
   dimension: updated_at {
@@ -105,11 +110,6 @@ view: mart_zendesk_ticket_call_and_cost {
           FALSE
         ) ;;
     description: "Indicates if the ticket is considered valid based on group and other criteria."
-  }
-
-  dimension: first_public_reply_at {
-    type: date_time
-    sql: ${TABLE}.first_public_reply_at ;;
   }
 
 
