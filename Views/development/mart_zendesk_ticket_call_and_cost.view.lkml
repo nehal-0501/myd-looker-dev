@@ -145,7 +145,7 @@ view: mart_zendesk_ticket_call_and_cost {
           )
           ELSE NULL
         END ;;
-    value_format: "#.00"  # Optional: Formats the output to 2 decimal places
+    # value_format: "#.00"  # Optional: Formats the output to 2 decimal places
     description: "Average number of hours for the first response (considering valid tickets and first reply)."
   }
 
