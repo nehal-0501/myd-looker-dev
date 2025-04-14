@@ -139,7 +139,7 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: CASE
           WHEN ${cal_ticket_valid} = TRUE AND ${first_public_reply_at} IS NOT NULL
           THEN TIMESTAMP_DIFF(
-            ${first_public_reply_at},
+            CAST(${first_public_reply_at} AS DATETIME),
             ${ticket_created_at},
             HOUR
           )
