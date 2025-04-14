@@ -41,9 +41,70 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.updated_at ;;
   }
 
+  dimension: _is_delete_me_ticket {
+    type: yesno
+    sql: ${TABLE}._is_delete_me_ticket ;;
+    description: "Indicates if the ticket is marked for deletion."
+  }
+
+  dimension: _is_hidden_ticket {
+    type: yesno
+    sql: ${TABLE}._is_hidden_ticket ;;
+    description: "Indicates if the ticket is hidden."
+  }
+
+  dimension: _is_seller_ticket_edm {
+    type: yesno
+    sql: ${TABLE}._is_seller_ticket_edm ;;
+    description: "Indicates if the ticket is a seller ticket from EDM."
+  }
+
+  dimension: _is_customer_escalation {
+    type: yesno
+    sql: ${TABLE}._is_customer_escalation ;;
+    description: "Indicates if the ticket is a customer escalation."
+  }
+
+  dimension: _is_seller_enquiry {
+    type: yesno
+    sql: ${TABLE}._is_seller_enquiry ;;
+    description: "Indicates if the ticket is a seller enquiry."
+  }
+
+  dimension: ticket_group {
+    type: string
+    sql: ${TABLE}.ticket_group ;;
+    description: "The group assigned to the ticket."
+  }
+
+
   dimension: cal_ticket_valid {
     type: yesno
-    sql: ${TABLE}.cal_ticket_valid ;;
+    sql: IF(
+          ${ticket_group} IN (
+            'All users (default group)',
+            'BIG W Market',
+            'Escalations',
+            'Everyday Market',
+            'Everyday Rewards Shop',
+            'MyDeal Group',
+            'Payment Disputes',
+            'Predelivery',
+            'Presales',
+            'seller',
+            'Seller Group',
+            'Supervisor',
+            'WMP Commercial (1P) Customer Service'
+          )
+          AND ${_is_delete_me_ticket} = FALSE
+          AND ${_is_hidden_ticket} = FALSE
+          AND ${_is_seller_ticket_edm} = FALSE
+          AND ${_is_customer_escalation} = FALSE
+          AND ${_is_seller_enquiry} = FALSE,
+          TRUE,
+          FALSE
+        ) ;;
+    description: "Indicates if the ticket is considered valid based on group and other criteria."
   }
 
   dimension: first_public_reply_at {
@@ -77,19 +138,19 @@ view: mart_zendesk_ticket_call_and_cost {
     drill_fields: [ticket_id, call_id]
   }
 
-  measure: first_response_hours {
-    type: number
+  measure: average_first_response_hours {
+    type: average
     sql: CASE
-           WHEN ${cal_ticket_valid} = TRUE AND ${first_public_reply_at} IS NOT NULL THEN
-             TIMESTAMP_DIFF(
-               ${first_public_reply_at},
-               ${ticket_created_at},
-               HOUR
-             )
-           ELSE NULL
-         END ;;
-    description: "Calculates the time difference in hours between ticket creation and first public reply for valid tickets."
-    value_format_name: decimal_0 # Optional: Formats the number as an integer
+          WHEN ${cal_ticket_valid} = TRUE AND ${first_public_reply_at} IS NOT NULL
+          THEN TIMESTAMP_DIFF(
+            ${first_public_reply_at},
+            ${ticket_created_at},
+            HOUR
+          )
+          ELSE NULL
+        END ;;
+    value_format: "#.00"  # Optional: Formats the output to 2 decimal places
+    description: "Average number of hours for the first response (considering valid tickets and first reply)."
   }
 
   dimension_group: start_time {
