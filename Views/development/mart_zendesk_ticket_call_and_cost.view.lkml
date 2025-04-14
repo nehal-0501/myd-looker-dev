@@ -1,5 +1,5 @@
 view: mart_zendesk_ticket_call_and_cost {
-  sql_table_name: `dbt_martin.mart_zendesk_ticket_call_and_cost` ;;
+  sql_table_name: `mart_customer_service.mart_zendesk_ticket_call_and_cost` ;;
 
   dimension: ticket_id {
     type: string
@@ -31,9 +31,9 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.cost ;;
   }
 
-  dimension: created_at {
+  dimension: ticket_created_at {
     type: date_time
-    sql: ${TABLE}.created_at ;;
+    sql: ${TABLE}.ticket_created_at ;;
   }
 
   dimension: updated_at {
@@ -112,10 +112,6 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.first_public_reply_at ;;
   }
 
-  dimension: ticket_created_at {
-    type: date_time
-    sql: ${TABLE}.created_at ;;
-  }
 
   measure: total_cost {
     type: sum
@@ -168,7 +164,7 @@ view: mart_zendesk_ticket_call_and_cost {
   dimension_group: created {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.created_at ;;
+    sql: ${TABLE}.ticket_created_at ;;
   }
 
   dimension_group: updated {
@@ -186,6 +182,6 @@ view: mart_zendesk_ticket_call_and_cost {
   dimension_group: ticket_created {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.created_at ;;
+    sql: ${TABLE}.ticket_created_at ;;
   }
 }
