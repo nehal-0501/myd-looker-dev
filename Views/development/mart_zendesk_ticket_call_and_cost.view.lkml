@@ -41,6 +41,11 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.first_public_reply_at ;;
   }
 
+  dimension: first_public_reply_at_date_time {
+    type: date_time
+    sql: ${TABLE}.first_public_reply_at ;;
+  }
+
   dimension: updated_at {
     type: date_time
     sql: ${TABLE}.updated_at ;;
