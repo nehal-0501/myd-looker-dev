@@ -185,4 +185,4 @@ view: mart_zendesk_ticket_call_and_cost {
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.ticket_created_at ;;
   }
-}
+ }
