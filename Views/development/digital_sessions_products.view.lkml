@@ -1,4 +1,5 @@
 view: digital_sessions_products {
+
   sql_table_name: "dbt_aitil.fct_digital_sessions_products" ;;
 
   dimension: dw_visitor_id {
@@ -25,9 +26,9 @@ view: digital_sessions_products {
     description: "The category of the device (e.g., desktop, mobile)."
   }
 
-  dimension: mobile_device_type {
+  dimension: device_mobile_type {
     type: string
-    sql: ${TABLE}.mobile_device_type ;;
+    sql: ${TABLE}.device_mobile_type ;;
     description: "The type of mobile device (e.g., iPhone, Android)."
   }
 
@@ -67,6 +68,12 @@ view: digital_sessions_products {
     description: "The unique article ID."
   }
 
+  dimension: banner {
+    type: string
+    sql: ${TABLE}.banner ;;
+    description: "The banner associated with the session or product interaction."
+  }
+
   measure: impression_product_count {
     type: sum
     sql: ${TABLE}.impression_product_count ;;
@@ -97,9 +104,60 @@ view: digital_sessions_products {
     description: "The number of purchases."
   }
 
-  dimension: session_date{
+  dimension: first_impression_product_time {
+    type: date_time
+    sql: ${TABLE}.first_impression_product_time ;;
+    description: "The timestamp of the first product impression."
+  }
+
+  dimension: first_view_product_time {
+    type: date_time
+    sql: ${TABLE}.first_view_product_time ;;
+    description: "The timestamp of the first product view."
+  }
+
+  dimension: first_add_to_cart_time {
+    type: date_time
+    sql: ${TABLE}.first_add_to_cart_time ;;
+    description: "The timestamp of the first time a product was added to the cart."
+  }
+
+  dimension: first_begin_checkout_time {
+    type: date_time
+    sql: ${TABLE}.first_begin_checkout_time ;;
+    description: "The timestamp of the first time the checkout process was started."
+  }
+
+  dimension: first_purchase_time {
+    type: date_time
+    sql: ${TABLE}.first_purchase_time ;;
+    description: "The timestamp of the first purchase."
+  }
+
+  dimension: session_end_time {
+    type: date_time
+    sql: ${TABLE}.session_end_time ;;
+    description: "The timestamp when the session ended."
+  }
+
+  dimension: session_date {
     type: date
-    sql: ${TABLE}.session_date;;
-    description: "The date of the session"
+    sql: ${TABLE}.session_date ;;
+    description: "The date of the session."
+  }
+
+  dimension_group: session_start {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.session_start_time ;;
+    description: "The start time of the session with various time hierarchies."
   }
 }
