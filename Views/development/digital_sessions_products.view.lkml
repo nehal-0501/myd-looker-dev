@@ -1,6 +1,6 @@
 view: digital_sessions_products {
 
-  sql_table_name: "dbt_aitil.fct_digital_sessions_products" ;;
+  sql_table_name: `dbt_aitil.fct_digital_sessions_products` ;;
 
   dimension: dw_visitor_id {
     type: string
