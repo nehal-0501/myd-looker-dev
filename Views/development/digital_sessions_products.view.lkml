@@ -8,6 +8,12 @@ view: digital_sessions_products {
     description: "The unique visitor ID."
   }
 
+  dimension: dw_session_id {
+    type: string
+    sql: ${TABLE}.dw_session_id ;;
+    description: "The unique session and product ID."
+  }
+
   dimension: session_id {
     type: string
     sql: ${TABLE}.session_id ;;
@@ -76,6 +82,12 @@ view: digital_sessions_products {
 
   measure: impression_product_count {
     type: sum
+    sql: ${TABLE}.impression_product_count ;;
+    description: "The number of product impressions."
+  }
+
+  dimension: impression_product_count_discrete {
+    type: number
     sql: ${TABLE}.impression_product_count ;;
     description: "The number of product impressions."
   }
@@ -161,4 +173,15 @@ view: digital_sessions_products {
     sql: ${TABLE}.session_start_time ;;
     description: "The start time of the session with various time hierarchies."
   }
+
+
+  measure: distinct_sessions_with_impressions {
+    type: count_distinct
+    sql: CASE
+      WHEN ${impression_product_count_discrete} > 0 THEN ${dw_session_id}
+      ELSE NULL
+    END ;;
+    description: "Count of distinct session IDs where impression_product_count is greater than 0."
+}
+
 }
