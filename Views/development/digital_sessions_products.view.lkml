@@ -116,6 +116,13 @@ view: digital_sessions_products {
     description: "The number of purchases."
   }
 
+
+  dimension: product_view_count_discrete {
+    type: number
+    sql: ${TABLE}.product_view_count ;;
+    description: "The number of product views."
+  }
+
   dimension: first_impression_product_time {
     type: date_time
     sql: ${TABLE}.first_impression_product_time ;;
@@ -183,5 +190,14 @@ view: digital_sessions_products {
     END ;;
     description: "Count of distinct session IDs where impression_product_count is greater than 0."
 }
+
+  measure: distinct_sessions_with_product_view {
+    type: count_distinct
+    sql: CASE
+      WHEN ${product_view_count_discrete} > 0 THEN ${dw_session_id}
+      ELSE NULL
+    END ;;
+    description: "Count of distinct session IDs where impression_product_count is greater than 0."
+  }
 
 }
