@@ -151,6 +151,7 @@ view: digital_sessions_products {
     timeframes: [
       raw,
       time,
+      hour,
       date,
       week,
       month,
