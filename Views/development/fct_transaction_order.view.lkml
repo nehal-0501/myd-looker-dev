@@ -220,4 +220,11 @@ view: fct_transaction_order {
     type: date
     sql: ${TABLE}.dss_updated_date ;;
   }
+
+  measure: order_count {
+    type: count_distinct
+    sql: ${TABLE}.dw_bid_deal_id ;;
+  }
+
+
 }
