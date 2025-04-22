@@ -147,7 +147,7 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   dimension: mp_seller_id {
-    type: string
+    type: number
     sql: ${TABLE}.mp_seller_id ;;
   }
 

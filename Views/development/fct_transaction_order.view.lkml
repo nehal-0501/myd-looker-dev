@@ -87,7 +87,7 @@ view: fct_transaction_order {
   }
 
   dimension: seller_id {
-    type: string
+    type: number
     sql: ${TABLE}.seller_id ;;
   }
 

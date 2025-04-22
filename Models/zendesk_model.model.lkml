@@ -8,7 +8,7 @@ explore: combined_zendesk_and_refund {
 
   join: fct_transaction_order { # Join fct_transaction_order
     type: left_outer
-    sql_on: CAST(${combined_zendesk_and_refund.mp_seller_id} AS INT64) = CAST(${fct_transaction_order.seller_id} AS INT64) ;;
+    sql_on: ${combined_zendesk_and_refund.mp_seller_id} = ${fct_transaction_order.seller_id} ;;
     relationship: many_to_one #  You might need to adjust this relationship
   }
 }
