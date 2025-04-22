@@ -66,6 +66,11 @@ view: wmp_order_refund {
     sql: ${TABLE}.SellerName ;;
   }
 
+  dimension: wmp_seller {
+    type: string
+    sql: ${TABLE}.wmp_seller ;;
+  }
+
   dimension: third_party_order_id {
     type: string
     sql: ${TABLE}.ThirdPartyOrderId ;;
