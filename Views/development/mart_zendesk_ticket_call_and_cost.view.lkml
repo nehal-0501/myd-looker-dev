@@ -337,6 +337,11 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.duration_seconds ;;
   }
 
+  measure: ticket_count {
+    type: count_distinct
+    sql: ${TABLE}.ticket_id ;;
+  }
+
   measure: count {
     type: count
     drill_fields: [ticket_id, call_id]
