@@ -1,11 +1,14 @@
 connection: "gcp-wow-wmp-ai-data-dev"
 include: "/Views/development/mart_zendesk_ticket_call_and_cost.view.lkml"
-include: "/Views/development/wmp_order_refund.view.lkml"
+include: "/Views/development/fct_transaction_order.view.lkml" # Include the new view
 
-explore: mart_zendesk_ticket_call_and_cost {
-  label: "Zendesk Ticket Call and Cost"
-}
+explore: combined_zendesk_and_refund {
+  label: "Zendesk, Refund, and Transaction Data"
+  from: mart_zendesk_ticket_call_and_cost
 
-explore: wmp_order_refund {
-  label: "WMP Order Refund"
+  join: fct_transaction_order { # Join fct_transaction_order
+    type: left_outer
+    sql_on: ${combined_zendesk_and_refund.mp_seller_id} = ${fct_transaction_order.seller_id} ;;
+    relationship: many_to_one #  You might need to adjust this relationship
+  }
 }
