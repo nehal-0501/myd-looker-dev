@@ -8,6 +8,36 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.ticket_id ;;
   }
 
+  dimension: call_id {
+    type: string
+    sql: ${TABLE}.call_id ;;
+  }
+
+  dimension: status {
+    type: string
+    sql: ${TABLE}.status ;;
+  }
+
+  dimension: call_completion_status {
+    type: string
+    sql: ${TABLE}.call_completion_status ;;
+  }
+
+  dimension: call_direction {
+    type: string
+    sql: ${TABLE}.call_direction ;;
+  }
+
+  dimension: _is_call_ivr_involved  {
+    type: yesno
+    sql: ${TABLE}._is_call_ivr_involved  ;;
+  }
+
+  dimension: _is_not_answered_call  {
+    type: yesno
+    sql: ${TABLE}._is_not_answered_call  ;;
+  }
+
   dimension: ticket_created_at {
     type: date_time
     sql: ${TABLE}.ticket_created_at ;;
@@ -104,6 +134,11 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.brand_id ;;
   }
 
+  dimension: brand_name {
+    type: string
+    sql: ${TABLE}.brand_name ;;
+  }
+
   dimension: call_brand_name {
     type: string
     sql: ${TABLE}.call_brand_name ;;
@@ -163,5 +198,41 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: FORMAT_TIMESTAMP('%A', ${ticket_created_at}) ;;
   }
 
+  measure: ticket_count {
+    type: count_distinct
+    sql: case when ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
+    ${ticket_group} IN (
+    'All users (default group)',
+    'BIG W Market',
+    'Escalations',
+    'Everyday Market',
+    'Everyday Rewards Shop',
+    'MyDeal Group',
+    'Payment Disputes',
+    'Predelivery',
+    'Presales',
+    'seller',
+    'Seller Group',
+    'Supervisor',
+    'WMP Commercial (1P) Customer Service'
+  )
+   and ${_is_delete_me_ticket} = FALSE
+   and ${_is_hidden_ticket} = FALSE
+   and ${_is_seller_ticket_edm} = FALSE
+   and ${_is_customer_escalation} = FALSE
+   and ${_is_seller_enquiry} = FALSE
+   AND ${status} != 'deleted'
+  then ${ticket_id} end  ;;
+  }
+
+  measure: call_count {
+    type: count_distinct
+    sql: case
+           when ${call_direction} = 'inbound'
+            and ${call_completion_status} NOT IN ('failed', 'abandoned_in_queue')
+            and ${_is_call_ivr_involved} = FALSE
+            and ${_is_not_answered_call} = FALSE
+           then ${call_id} end  ;;
+  }
 
 }
