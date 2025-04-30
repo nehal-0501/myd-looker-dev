@@ -1,4 +1,6 @@
+include: "popanalysis.view"
 view: mart_zendesk_ticket_call_and_cost {
+  extends: [popanalysis]
   sql_table_name: `mart_customer_service.mart_zendesk_ticket_call_and_cost` ;;
 
   dimension: ticket_id {
@@ -6,7 +8,12 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.ticket_id ;;
   }
 
-  dimension_group: ticket_created_at {
+  dimension: ticket_created_at {
+    type: date_time
+    sql: ${TABLE}.ticket_created_at ;;
+  }
+
+  dimension_group: ticket_created_date {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.ticket_created_at ;;
@@ -107,7 +114,54 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.ticket_raised ;;
   }
 
+#start dev space
 
+  parameter: timeframe_picker {
+    label: "Date Granularity"
+    type: string
+    allowed_value: { value: "Date" }
+    allowed_value: { value: "Week" }
+    allowed_value: { value: "Month" }
+    # allowed_value: { value: "Fiscal_Week" }
+    # allowed_value: { value: "Fiscal_Month" }
+    default_value: "Date"
+  }
+
+  dimension: dynamic_timeframe {
+    type: string
+    sql:
+    CASE
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_created_at} AS STRING
+    ELSE CAST(${ticket_created_at} AS STRING)
+    END ;;
+  }
+
+
+  dimension: period {
+    hidden: yes
+    type: string
+    sql: case when ${ticket_created_at} >= ${filter_start_date_date} AND ${ticket_created_at} < ${filter_end_date_date} then 'CP'
+          when ${ticket_created_at} >= ${previous_start_date} AND ${ticket_created_at} < ${filter_start_date_date} then 'PP'
+          when ${ticket_created_at} >= ${previous_year_start_date} AND ${ticket_created_at} < ${previous_year_end_date}  then 'LY' end ;;
+  }
+
+  dimension: is_current_period {
+    hidden: yes
+    type: yesno
+    sql: ${ticket_created_at} >= ${filter_start_date_date} AND ${ticket_created_at} < ${filter_end_date_date} ;;
+  }
+
+  dimension: is_previous_period {
+    hidden: yes
+    type: yesno
+    sql: ${ticket_created_at} >= ${previous_start_date} AND ${ticket_created_at} < ${filter_start_date_date} ;;
+  }
+
+  dimension: day_of_week {
+    label: "Day of Week_TraderOrderDate"
+    type: string
+    sql: FORMAT_TIMESTAMP('%A', ${ticket_created_at}) ;;
+  }
 
 
 }
