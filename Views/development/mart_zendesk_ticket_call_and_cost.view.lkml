@@ -1,5 +1,5 @@
 view: mart_zendesk_ticket_call_and_cost {
-  sql_table_name: `ssong_sandbox.zendesk_reporting` ;;
+  sql_table_name: `mart_customer_service.mart_zendesk_ticket_call_and_cost` ;;
 
   dimension: ticket_id {
     type: string
@@ -106,4 +106,8 @@ view: mart_zendesk_ticket_call_and_cost {
     type: string
     sql: ${TABLE}.ticket_raised ;;
   }
+
+
+
+
 }
