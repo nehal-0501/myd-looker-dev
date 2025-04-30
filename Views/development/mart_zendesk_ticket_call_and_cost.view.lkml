@@ -100,7 +100,7 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   dimension: csat_score {
-    type: number
+    type: string
     sql: ${TABLE}.csat_score ;;
   }
 
@@ -144,9 +144,19 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.call_brand_name ;;
   }
 
+  dimension: channel {
+    type: string
+    sql: ${TABLE}.channel ;;
+  }
+
   dimension: ticket_raised {
     type: string
     sql: ${TABLE}.ticket_raised ;;
+  }
+
+  dimension: _is_csat_survey_completed {
+    type: yesno
+    sql: ${TABLE}._is_csat_survey_completed ;;
   }
 
 #start dev space
@@ -221,8 +231,92 @@ view: mart_zendesk_ticket_call_and_cost {
    and ${_is_seller_ticket_edm} = FALSE
    and ${_is_customer_escalation} = FALSE
    and ${_is_seller_enquiry} = FALSE
-   AND ${status} != 'deleted'
+   and ${status} != 'deleted'
+   and ${channel} != 'voice'
   then ${ticket_id} end  ;;
+  }
+
+  measure: ticket_escalation_count {
+    type: count_distinct
+    sql: case when ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
+          ${ticket_group} IN (
+          'All users (default group)',
+          'BIG W Market',
+          'Escalations',
+          'Everyday Market',
+          'Everyday Rewards Shop',
+          'MyDeal Group',
+          'Payment Disputes',
+          'Predelivery',
+          'Presales',
+          'seller',
+          'Seller Group',
+          'Supervisor',
+          'WMP Commercial (1P) Customer Service'
+        )
+         and ${_is_delete_me_ticket} = FALSE
+         and ${_is_hidden_ticket} = FALSE
+         and ${_is_seller_ticket_edm} = FALSE
+         and ${_is_customer_escalation}
+         and ${_is_seller_enquiry} = FALSE
+         and ${status} != 'deleted'
+        then ${ticket_id} end  ;;
+  }
+
+  measure: positive_csat_response {
+    type: count_distinct
+    sql: case when ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
+          ${ticket_group} IN (
+          'All users (default group)',
+          'BIG W Market',
+          'Escalations',
+          'Everyday Market',
+          'Everyday Rewards Shop',
+          'MyDeal Group',
+          'Payment Disputes',
+          'Predelivery',
+          'Presales',
+          'seller',
+          'Seller Group',
+          'Supervisor',
+          'WMP Commercial (1P) Customer Service'
+        )
+         and ${_is_delete_me_ticket} = FALSE
+         and ${_is_hidden_ticket} = FALSE
+         and ${_is_seller_ticket_edm} = FALSE
+         and ${_is_customer_escalation} = FALSE
+         and ${_is_seller_enquiry} = FALSE
+         and ${status} != 'deleted'
+         and ${csat_score} = 'good'
+        then ${ticket_id} end  ;;
+  }
+
+  measure: total_csat_response {
+    type: count_distinct
+    sql: case when ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
+          ${ticket_group} IN (
+          'All users (default group)',
+          'BIG W Market',
+          'Escalations',
+          'Everyday Market',
+          'Everyday Rewards Shop',
+          'MyDeal Group',
+          'Payment Disputes',
+          'Predelivery',
+          'Presales',
+          'seller',
+          'Seller Group',
+          'Supervisor',
+          'WMP Commercial (1P) Customer Service'
+        )
+         and ${_is_delete_me_ticket} = FALSE
+         and ${_is_hidden_ticket} = FALSE
+         and ${_is_seller_ticket_edm} = FALSE
+         and ${_is_customer_escalation} = FALSE
+         and ${_is_seller_enquiry} = FALSE
+         and ${status} != 'deleted'
+         and ${_is_csat_survey_completed}
+        then ${ticket_id} end  ;;
   }
 
   measure: call_count {
@@ -233,6 +327,11 @@ view: mart_zendesk_ticket_call_and_cost {
             and ${_is_call_ivr_involved} = FALSE
             and ${_is_not_answered_call} = FALSE
            then ${call_id} end  ;;
+  }
+
+  measure: time_to_resolution_days {
+    type: sum
+    sql:  date_diff(${ticket_solved_at} , ${ticket_created_at} , day) ;;
   }
 
 }
