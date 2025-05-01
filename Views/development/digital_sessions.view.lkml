@@ -1,78 +1,132 @@
 view: digital_sessions {
-  # # You can specify the table name if it's different from the view name:
-  # sql_table_name: my_schema_name.tester ;;
-  #view: digital_sessions {
-  sql_table_name: `dbt_aitil.fct_digital_sessions` ;; # Replace with your actual table name
 
-  dimension: dw_visitor_id {
-    type: string
-    sql: ${TABLE}.dw_visitor_id ;;
-    description: "The unique visitor ID."
-  }
+  sql_table_name: `dbt_aitil.obt_digital_session_product_interactions` ;;
 
   dimension: session_id {
-    type: string
+    primary_key: yes
     sql: ${TABLE}.session_id ;;
+  }
+
+  dimension: user_id {
+    type: string
+    sql: ${TABLE}.user_id ;;
+    description: "The unique user ID."
+  }
+
+  dimension: wxid {
+    type: string
+    sql: ${TABLE}.wxid ;;
     description: "The unique session ID."
   }
 
-  dimension: banner {
+  dimension: session_key {
     type: string
-    sql: ${TABLE}.banner ;;
-    description: "The banner associated with the session."
+    sql: ${TABLE}.session_key ;;
+    description: "The unique session key."
   }
 
-  dimension_group: session_start {
+  dimension: session_partition_key {
+    type: string
+    sql: ${TABLE}.session_partition_key ;;
+    description: "The unique session partition ID."
+  }
+
+  dimension: client_key {
+    type: string
+    sql: ${TABLE}.client_key ;;
+    description: "The client ID."
+  }
+
+  dimension: banner_key {
+    type: string
+    sql: ${TABLE}.banner_key ;;
+    description: "The banner ID."
+  }
+
+  dimension: hashed_crn {
+    type: string
+    sql: ${TABLE}.hashed_crn ;;
+    description: "The banner ID."
+  }
+
+  dimension: platform {
+    type: string
+    sql: ${TABLE}.platform ;;
+    description: "The platform used (e.g., web, mobile)."
+  }
+
+  dimension: device_category {
+    type: string
+    sql: ${TABLE}.device_category ;;
+    description: "The category of the device (e.g., desktop, mobile)."
+  }
+
+  dimension: device_mobile_type {
+    type: string
+    sql: ${TABLE}.device_mobile_type ;;
+    description: "The type of mobile device (e.g., iPhone, Android)."
+  }
+
+  dimension: geo_country {
+    type: string
+    sql: ${TABLE}.geo_country ;;
+    description: "The country of the user's location."
+  }
+
+  dimension: session_source {
+    type: string
+    sql: ${TABLE}.session_source ;;
+    description: "The banner associated with the session or product interaction."
+  }
+
+  dimension: session_medium {
+    type: string
+    sql: ${TABLE}.session_source ;;
+    description: "The banner associated with the session or product interaction."
+  }
+
+  dimension: session_campaign {
+    type: string
+    sql: ${TABLE}.session_campaign ;;
+    description: "The banner associated with the session or product interaction."
+  }
+
+  dimension_group: session_partition_start_time {
     type: time
     timeframes: [
       raw,
       time,
+      hour,
       date,
       week,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}.session_start_time ;;
-    description: "The start time of the session."
+    sql: ${TABLE}.session_partition_start_time ;;
+    description: "The start time of the session with various time hierarchies."
   }
 
-  dimension_group: session_end {
+  dimension_group: session_partition_date {
     type: time
     timeframes: [
-      raw,
-      time,
       date,
       week,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}.session_end_time ;;
-    description: "The end time of the session."
+    sql: ${TABLE}.session_partition_date ;;
+    description: "The start time of the session with various time hierarchies."
   }
 
-  dimension: session_date {
-    type: date
-    sql: ${TABLE}.session_date ;;
-    description: "The date of the session."
-  }
-
-  dimension: session_duration_seconds {
-    type: number
-    sql: ${TABLE}.session_duration_seconds ;;
-    description: "The duration of the session in seconds."
-  }
-
-  dimension: is_marketplus_session {
-    type: yesno
-    sql: ${TABLE}.is_marketplus_session ;;
-    description: "Indicates if the session was a Marketplus session (True/False)."
-  }
-
-  measure: total_sessions {
+  measure: session_count {
     type: count_distinct
-    sql: ${session_id} ;;
-    description: "Total number of unique sessions."
+    sql: ${session_key}  ;;
+    description: "The number of sessions."
   }
+
+  dimension: productinteractions {hidden:yes}
+
+
 }

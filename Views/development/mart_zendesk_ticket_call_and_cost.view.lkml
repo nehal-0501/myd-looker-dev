@@ -43,6 +43,12 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: ${TABLE}.ticket_created_at ;;
   }
 
+
+  dimension: ticket_created_at_timestamp {
+    type: date_time
+    sql:cast(FORMAT_TIMESTAMP('%Y-%m-%dT%H:%M:%E6S', CAST(${TABLE}.ticket_created_at AS TIMESTAMP)) as string) ;;
+  }
+
   dimension_group: ticket_created_date {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
@@ -50,7 +56,7 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   dimension: ticket_solved_at {
-    type: string
+    type: date_time
     sql: ${TABLE}.ticket_solved_at ;;
   }
 
