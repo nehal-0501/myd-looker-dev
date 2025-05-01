@@ -187,8 +187,8 @@ view: mart_zendesk_ticket_call_and_cost {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_created_at} AS STRING
-    ELSE CAST(${ticket_created_at} AS STRING)
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_created_at_string} AS STRING
+    ELSE CAST(${ticket_created_at_string} AS STRING)
     END ;;
   }
 
@@ -196,21 +196,21 @@ view: mart_zendesk_ticket_call_and_cost {
   dimension: period {
     hidden: yes
     type: string
-    sql: case when ${ticket_created_at} >= ${filter_start_date_date} AND ${ticket_created_at} < ${filter_end_date_date} then 'CP'
-          when ${ticket_created_at} >= ${previous_start_date} AND ${ticket_created_at} < ${filter_start_date_date} then 'PP'
-          when ${ticket_created_at} >= ${previous_year_start_date} AND ${ticket_created_at} < ${previous_year_end_date}  then 'LY' end ;;
+    sql: case when ${ticket_created_at_string} >= ${filter_start_date_date} AND ${ticket_created_at_string} < ${filter_end_date_date} then 'CP'
+          when ${ticket_created_at_string} >= ${previous_start_date} AND ${ticket_created_at_string} < ${filter_start_date_date} then 'PP'
+          when ${ticket_created_at_string} >= ${previous_year_start_date} AND ${ticket_created_at_string} < ${previous_year_end_date}  then 'LY' end ;;
   }
 
   dimension: is_current_period {
     hidden: yes
     type: yesno
-    sql: ${ticket_created_at} >= ${filter_start_date_date} AND ${ticket_created_at} < ${filter_end_date_date} ;;
+    sql: ${ticket_created_at_string} >= ${filter_start_date_date} AND ${ticket_created_at_string} < ${filter_end_date_date} ;;
   }
 
   dimension: is_previous_period {
     hidden: yes
     type: yesno
-    sql: ${ticket_created_at} >= ${previous_start_date} AND ${ticket_created_at} < ${filter_start_date_date} ;;
+    sql: ${ticket_created_at_string} >= ${previous_start_date} AND ${ticket_created_at_string} < ${filter_start_date_date} ;;
   }
 
   dimension: day_of_week {
