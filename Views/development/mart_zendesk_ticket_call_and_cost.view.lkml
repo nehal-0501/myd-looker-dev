@@ -341,7 +341,7 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   measure: time_to_resolution_days {
-    type: number
+    type: sum
     sql:  date_diff(${ticket_solved_at} , ${ticket_created_at_string} , day) ;;
   }
 
