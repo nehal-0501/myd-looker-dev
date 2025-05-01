@@ -39,8 +39,8 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   dimension: ticket_created_at {
-    type: date_time
-    sql: ${TABLE}.ticket_created_at ;;
+    type: date
+    sql: cast(${TABLE}.ticket_created_at as date) ;;
   }
 
 
@@ -56,8 +56,13 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   dimension: ticket_solved_at {
-    type: date_time
-    sql: ${TABLE}.ticket_solved_at ;;
+    type: string
+    sql: cast(${TABLE}.ticket_solved_at as date) ;;
+  }
+
+  dimension: ticket_created_at_string {
+    type: string
+    sql: cast(${TABLE}.ticket_created_at as date) ;;
   }
 
   dimension: seller_id {
@@ -336,8 +341,8 @@ view: mart_zendesk_ticket_call_and_cost {
   }
 
   measure: time_to_resolution_days {
-    type: sum
-    sql:  date_diff(${ticket_solved_at} , ${ticket_created_at} , day) ;;
+    type: number
+    sql:  date_diff(${ticket_solved_at} , ${ticket_created_at_string} , day) ;;
   }
 
 }
