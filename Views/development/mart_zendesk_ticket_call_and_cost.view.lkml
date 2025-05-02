@@ -216,7 +216,7 @@ view: mart_zendesk_ticket_call_and_cost {
   dimension: day_of_week {
     label: "Day of Week_TraderOrderDate"
     type: string
-    sql: FORMAT_TIMESTAMP('%A', ${ticket_created_at}) ;;
+    sql: FORMAT_TIMESTAMP('%A', ${ticket_created_at_string}) ;;
   }
 
   measure: ticket_count {

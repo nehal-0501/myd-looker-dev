@@ -2,6 +2,7 @@ view: digital_sessions {
 
   sql_table_name: `dbt_aitil.obt_digital_session_product_interactions` ;;
 
+
   dimension: session_id {
     primary_key: yes
     sql: ${TABLE}.session_id ;;
@@ -107,16 +108,9 @@ view: digital_sessions {
     description: "The start time of the session with various time hierarchies."
   }
 
-  dimension_group: session_partition_date {
-    type: time
-    timeframes: [
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.session_partition_date ;;
+  dimension: session_partition_date {
+    type: date
+    sql: cast(${TABLE}.session_partition_date as date) ;;
     description: "The start time of the session with various time hierarchies."
   }
 
