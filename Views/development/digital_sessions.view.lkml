@@ -93,6 +93,18 @@ view: digital_sessions {
     description: "The banner associated with the session or product interaction."
   }
 
+  dimension: session_channel {
+    type: string
+    sql: ${TABLE}.session_campaign ;;
+    description: "The banner associated with the session or product interaction."
+  }
+
+  dimension: last_non_direct_channel {
+    type: string
+    sql: ${TABLE}.session_campaign ;;
+    description: "The banner associated with the session or product interaction."
+  }
+
   dimension_group: session_partition_start_time {
     type: time
     timeframes: [
