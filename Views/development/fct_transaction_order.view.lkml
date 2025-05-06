@@ -13,6 +13,11 @@ view: fct_transaction_order {
     sql: ${TABLE}.accepted_at ;;
   }
 
+  dimension: accepted_at_helper {
+    type: string
+    sql: cast(${TABLE}.accepted_at as date) ;;
+  }
+
   dimension: seller_id {
     type: number
     sql: ${TABLE}.seller_id ;;
@@ -61,8 +66,8 @@ view: fct_transaction_order {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${accepted_at} AS STRING
-    ELSE CAST(${accepted_at} AS STRING)
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${accepted_at_helper} AS STRING
+    ELSE CAST(${accepted_at_helper} AS STRING)
     END ;;
   }
 
@@ -71,33 +76,33 @@ view: fct_transaction_order {
     convert_tz: no
     timeframes: [raw, time, date, week, month, quarter, year]
     datatype: datetime
-    sql: ${TABLE}.accepted_at ;;
+    sql: ${TABLE}.accepted_at_helper ;;
   }
 
   dimension: period {
     hidden: yes
     type: string
-    sql: case when ${accepted_at} >= ${filter_start_date_date} AND ${accepted_at} < ${filter_end_date_date} then 'CP'
-          when ${accepted_at} >= ${previous_start_date} AND ${accepted_at} < ${filter_start_date_date} then 'PP'
-          when ${accepted_at} >= ${previous_year_start_date} AND ${accepted_at} < ${previous_year_end_date}  then 'LY' end ;;
+    sql: case when ${accepted_at_helper} >= ${filter_start_date_date} AND ${accepted_at_helper} < ${filter_end_date_date} then 'CP'
+          when ${accepted_at_helper} >= ${previous_start_date} AND ${accepted_at_helper} < ${filter_start_date_date} then 'PP'
+          when ${accepted_at_helper} >= ${previous_year_start_date} AND ${accepted_at_helper} < ${previous_year_end_date}  then 'LY' end ;;
   }
 
   dimension: is_current_period {
     hidden: yes
     type: yesno
-    sql: ${accepted_at} >= ${filter_start_date_date} AND ${accepted_at} < ${filter_end_date_date} ;;
+    sql: ${accepted_at_helper} >= ${filter_start_date_date} AND ${accepted_at_helper} < ${filter_end_date_date} ;;
   }
 
   dimension: is_previous_period {
     hidden: yes
     type: yesno
-    sql: ${accepted_at} >= ${previous_start_date} AND ${accepted_at} < ${filter_start_date_date} ;;
+    sql: ${accepted_at_helper} >= ${previous_start_date} AND ${accepted_at_helper} < ${filter_start_date_date} ;;
   }
 
   dimension: day_of_week {
     label: "Day of Week_TraderOrderDate"
     type: string
-    sql: FORMAT_TIMESTAMP('%A', ${accepted_at}) ;;
+    sql: FORMAT_TIMESTAMP('%A', ${accepted_at_helper}) ;;
   }
 
   measure: order_count {

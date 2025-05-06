@@ -219,6 +219,59 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: FORMAT_TIMESTAMP('%A', ${ticket_created_at_string}) ;;
   }
 
+  dimension: valid_ticket {
+    type: yesno
+    sql:  ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
+          ${ticket_group} IN (
+          'All users (default group)',
+          'BIG W Market',
+          'Escalations',
+          'Everyday Market',
+          'Everyday Rewards Shop',
+          'MyDeal Group',
+          'Payment Disputes',
+          'Predelivery',
+          'Presales',
+          'seller',
+          'Seller Group',
+          'Supervisor',
+          'WMP Commercial (1P) Customer Service'
+        )
+         and ${_is_delete_me_ticket} = FALSE
+         and ${_is_hidden_ticket} = FALSE
+         and ${_is_seller_ticket_edm} = FALSE
+         and ${_is_customer_escalation} = FALSE
+         and ${_is_seller_enquiry} = FALSE
+         and ${status} != 'deleted'  ;;
+  }
+
+  dimension: valid_ticket_for_escalation {
+    type: yesno
+    sql:  ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
+          ${ticket_group} IN (
+          'All users (default group)',
+          'BIG W Market',
+          'Escalations',
+          'Everyday Market',
+          'Everyday Rewards Shop',
+          'MyDeal Group',
+          'Payment Disputes',
+          'Predelivery',
+          'Presales',
+          'seller',
+          'Seller Group',
+          'Supervisor',
+          'WMP Commercial (1P) Customer Service'
+        )
+         and ${_is_delete_me_ticket} = FALSE
+         and ${_is_hidden_ticket} = FALSE
+         and ${_is_seller_ticket_edm} = FALSE
+         and ${_is_customer_escalation}
+         and ${_is_seller_enquiry} = FALSE
+         and ${status} != 'deleted'  ;;
+  }
+
+
   measure: ticket_count {
     type: count_distinct
     sql: case when ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
@@ -283,7 +336,6 @@ view: mart_zendesk_ticket_call_and_cost {
             and ${_is_not_answered_call} = FALSE
            then ${call_id} end  ;;
   }
-
 
   measure: ticket_escalation_count {
     type: count_distinct
