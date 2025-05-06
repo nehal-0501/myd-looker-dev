@@ -16,6 +16,26 @@ view: digital_session_product_interactions {
     type: number
   }
 
+  dimension: product_views {
+    label: "Number Of product_views"
+    type: number
+  }
+
+  dimension: add_to_carts {
+    label: "Number Of add_to_carts"
+    type: number
+  }
+
+  dimension: begin_checkouts {
+    label: "Number Of begin_checkouts"
+    type: number
+  }
+
+  dimension: purchases {
+    label: "Number Of purchases"
+    type: number
+  }
+
   measure: total_product_impressions {
     type: sum
     sql: ${product_impressions} ;;

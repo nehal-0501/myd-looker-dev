@@ -1,5 +1,6 @@
+include: "popanalysis.view"
 view: digital_sessions {
-
+  extends: [popanalysis]
   sql_table_name: `dbt_aitil.obt_digital_session_product_interactions` ;;
 
 
@@ -109,7 +110,13 @@ view: digital_sessions {
   }
 
   dimension: session_partition_date {
-    type: date
+    type: date_time
+    sql: cast(${TABLE}.session_partition_date as timestamp) ;;
+    description: "The start time of the session with various time hierarchies."
+  }
+
+  dimension: session_partition_date_helper {
+    type: string
     sql: cast(${TABLE}.session_partition_date as date) ;;
     description: "The start time of the session with various time hierarchies."
   }
@@ -120,7 +127,57 @@ view: digital_sessions {
     description: "The number of sessions."
   }
 
+
+
   dimension: productinteractions {hidden:yes}
 
+  #start dev space
+
+  parameter: timeframe_picker {
+    label: "Date Granularity"
+    type: string
+    allowed_value: { value: "Date" }
+    allowed_value: { value: "Week" }
+    allowed_value: { value: "Month" }
+    # allowed_value: { value: "Fiscal_Week" }
+    # allowed_value: { value: "Fiscal_Month" }
+    default_value: "Date"
+  }
+
+  dimension: dynamic_timeframe {
+    type: string
+    sql:
+    CASE
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${session_partition_date_helper} AS STRING
+    ELSE CAST(${session_partition_date_helper} AS STRING)
+    END ;;
+  }
+
+
+  dimension: period {
+    hidden: yes
+    type: string
+    sql: case when ${session_partition_date_helper} >= ${filter_start_date_date} AND ${session_partition_date_helper} < ${filter_end_date_date} then 'CP'
+          when ${session_partition_date_helper} >= ${previous_start_date} AND ${session_partition_date_helper} < ${filter_start_date_date} then 'PP'
+          when ${session_partition_date_helper} >= ${previous_year_start_date} AND ${session_partition_date_helper} < ${previous_year_end_date}  then 'LY' end ;;
+  }
+
+  dimension: is_current_period {
+    hidden: yes
+    type: yesno
+    sql: ${session_partition_date_helper} >= ${filter_start_date_date} AND ${session_partition_date_helper} < ${filter_end_date_date} ;;
+  }
+
+  dimension: is_previous_period {
+    hidden: yes
+    type: yesno
+    sql: ${session_partition_date_helper} >= ${previous_start_date} AND ${session_partition_date_helper} < ${filter_start_date_date} ;;
+  }
+
+  dimension: day_of_week {
+    label: "Day of Week_TraderOrderDate"
+    type: string
+    sql: FORMAT_TIMESTAMP('%A', ${session_partition_date_helper}) ;;
+  }
 
 }
