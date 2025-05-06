@@ -243,9 +243,47 @@ view: mart_zendesk_ticket_call_and_cost {
    and ${_is_customer_escalation} = FALSE
    and ${_is_seller_enquiry} = FALSE
    and ${status} != 'deleted'
-   and ${channel} != 'voice'
   then ${ticket_id} end  ;;
   }
+
+  measure: contact_ticket_count {
+    type: count_distinct
+    sql: case when ${brand_name} in ( 'Big W Market', 'Everyday Market', 'Everyday Rewards Shop','MyDeal' ) and
+          ${ticket_group} IN (
+          'All users (default group)',
+          'BIG W Market',
+          'Escalations',
+          'Everyday Market',
+          'Everyday Rewards Shop',
+          'MyDeal Group',
+          'Payment Disputes',
+          'Predelivery',
+          'Presales',
+          'seller',
+          'Seller Group',
+          'Supervisor',
+          'WMP Commercial (1P) Customer Service'
+        )
+         and ${_is_delete_me_ticket} = FALSE
+         and ${_is_hidden_ticket} = FALSE
+         and ${_is_seller_ticket_edm} = FALSE
+         and ${_is_customer_escalation} = FALSE
+         and ${_is_seller_enquiry} = FALSE
+         and ${status} != 'deleted'
+         and ${channel} != 'voice'
+        then ${ticket_id} end  ;;
+  }
+
+  measure: call_count {
+    type: count_distinct
+    sql: case
+           when ${call_direction} = 'inbound'
+            and ${call_completion_status} NOT IN ('failed', 'abandoned_in_queue')
+            and ${_is_call_ivr_involved} = FALSE
+            and ${_is_not_answered_call} = FALSE
+           then ${call_id} end  ;;
+  }
+
 
   measure: ticket_escalation_count {
     type: count_distinct
@@ -328,16 +366,6 @@ view: mart_zendesk_ticket_call_and_cost {
          and ${status} != 'deleted'
          and ${_is_csat_survey_completed}
         then ${ticket_id} end  ;;
-  }
-
-  measure: call_count {
-    type: count_distinct
-    sql: case
-           when ${call_direction} = 'inbound'
-            and ${call_completion_status} NOT IN ('failed', 'abandoned_in_queue')
-            and ${_is_call_ivr_involved} = FALSE
-            and ${_is_not_answered_call} = FALSE
-           then ${call_id} end  ;;
   }
 
   measure: time_to_resolution_days {
