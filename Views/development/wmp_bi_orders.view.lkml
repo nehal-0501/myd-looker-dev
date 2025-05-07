@@ -1,6 +1,6 @@
 view: wmp_bi_orders {
 
-  sql_table_name: `view_market_plus.wmp_orders` ;;
+  sql_table_name: `gcp-wow-rwds-ai-bi-prod.view_market_plus.wmp_orders` ;;
 
   dimension: fiscal_month {
     type: string
