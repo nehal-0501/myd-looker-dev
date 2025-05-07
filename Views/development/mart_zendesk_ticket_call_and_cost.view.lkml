@@ -43,6 +43,10 @@ view: mart_zendesk_ticket_call_and_cost {
     sql: cast(${TABLE}.ticket_created_at as date) ;;
   }
 
+  dimension: call_created_at {
+    type: string
+    sql: cast(${TABLE}.call_created_at as date) ;;
+  }
 
   dimension: ticket_created_at_timestamp {
     type: date_time
@@ -63,6 +67,11 @@ view: mart_zendesk_ticket_call_and_cost {
   dimension: ticket_created_at_string {
     type: string
     sql: cast(${TABLE}.ticket_created_at as date) ;;
+  }
+
+  dimension: contact_created_at {
+    type: string
+    sql: coalesce(${ticket_created_at_string}, ${call_created_at}) ;;
   }
 
   dimension: seller_id {
@@ -187,8 +196,8 @@ view: mart_zendesk_ticket_call_and_cost {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_created_at_string} AS STRING
-    ELSE CAST(${ticket_created_at_string} AS STRING)
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${contact_created_at} AS STRING
+    ELSE CAST(${contact_created_at} AS STRING)
     END ;;
   }
 
@@ -196,27 +205,27 @@ view: mart_zendesk_ticket_call_and_cost {
   dimension: period {
     hidden: yes
     type: string
-    sql: case when ${ticket_created_at_string} >= ${filter_start_date_date} AND ${ticket_created_at_string} < ${filter_end_date_date} then 'CP'
-          when ${ticket_created_at_string} >= ${previous_start_date} AND ${ticket_created_at_string} < ${filter_start_date_date} then 'PP'
-          when ${ticket_created_at_string} >= ${previous_year_start_date} AND ${ticket_created_at_string} < ${previous_year_end_date}  then 'LY' end ;;
+    sql: case when ${contact_created_at} >= ${filter_start_date_date} AND ${contact_created_at} < ${filter_end_date_date} then 'CP'
+          when ${contact_created_at} >= ${previous_start_date} AND ${contact_created_at} < ${filter_start_date_date} then 'PP'
+          when ${contact_created_at} >= ${previous_year_start_date} AND ${contact_created_at} < ${previous_year_end_date}  then 'LY' end ;;
   }
 
   dimension: is_current_period {
     hidden: yes
     type: yesno
-    sql: ${ticket_created_at_string} >= ${filter_start_date_date} AND ${ticket_created_at_string} < ${filter_end_date_date} ;;
+    sql: ${contact_created_at} >= ${filter_start_date_date} AND ${contact_created_at} < ${filter_end_date_date} ;;
   }
 
   dimension: is_previous_period {
     hidden: yes
     type: yesno
-    sql: ${ticket_created_at_string} >= ${previous_start_date} AND ${ticket_created_at_string} < ${filter_start_date_date} ;;
+    sql: ${contact_created_at} >= ${previous_start_date} AND ${contact_created_at} < ${filter_start_date_date} ;;
   }
 
   dimension: day_of_week {
     label: "Day of Week_TraderOrderDate"
     type: string
-    sql: FORMAT_TIMESTAMP('%A', ${ticket_created_at_string}) ;;
+    sql: FORMAT_TIMESTAMP('%A', ${contact_created_at}) ;;
   }
 
   dimension: valid_ticket {
