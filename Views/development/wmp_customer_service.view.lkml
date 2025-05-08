@@ -133,8 +133,6 @@ view: wmp_customer_service {
            then ${call_id} end  ;;
   }
 
-
-
 #start dev space
 
   parameter: timeframe_picker {
