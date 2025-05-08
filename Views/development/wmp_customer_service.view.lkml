@@ -182,4 +182,44 @@ view: wmp_customer_service {
     sql: FORMAT_TIMESTAMP('%A', ${contact_created_at}) ;;
   }
 
+## Add New Filter
+
+
+  dimension: dynamic_timeframe_test {
+    type: string
+    sql:
+    CASE
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_solved_at_string} AS STRING
+    ELSE CAST(${ticket_solved_at_string} AS STRING)
+    END ;;
+  }
+
+
+  dimension: period_test {
+    hidden: yes
+    type: string
+    sql: case when ${ticket_solved_at_string} >= ${filter_start_date_date} AND ${ticket_solved_at_string} < ${filter_end_date_date} then 'CP'
+          when ${ticket_solved_at_string} >= ${previous_start_date} AND ${ticket_solved_at_string} < ${filter_start_date_date} then 'PP'
+          when ${ticket_solved_at_string} >= ${previous_year_start_date} AND ${ticket_solved_at_string} < ${previous_year_end_date}  then 'LY' end ;;
+  }
+
+  dimension: is_current_period_test {
+    hidden: yes
+    type: yesno
+    sql: ${ticket_solved_at_string} >= ${filter_start_date_date} AND ${ticket_solved_at_string} < ${filter_end_date_date} ;;
+  }
+
+  dimension: is_previous_period_test {
+    hidden: yes
+    type: yesno
+    sql: ${ticket_solved_at_string} >= ${previous_start_date} AND ${ticket_solved_at_string} < ${filter_start_date_date} ;;
+  }
+
+  dimension: day_of_week_test {
+    label: "Day of Week_TraderOrderDate"
+    type: string
+    sql: FORMAT_TIMESTAMP('%A', ${is_current_period_test}) ;;
+  }
+
+
 }
