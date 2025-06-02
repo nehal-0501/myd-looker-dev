@@ -12,6 +12,36 @@ view: wmp_customer_service {
     sql: ${TABLE}.brand_name ;;
   }
 
+  dimension: seller_id {
+    type: string
+    sql: ${TABLE}.seller_id ;;
+  }
+
+  dimension: product_id {
+    type: string
+    sql: ${TABLE}.product_id ;;
+  }
+
+  dimension: product_name {
+    type: string
+    sql: ${TABLE}.product_name ;;
+  }
+
+  dimension: enquiry {
+    type: string
+    sql: ${TABLE}.enquiry ;;
+  }
+
+  dimension: enquiry_type {
+    type: string
+    sql: ${TABLE}.enquiry_type ;;
+  }
+
+  dimension: ticket_status {
+    type: string
+    sql: ${TABLE}.ticket_status ;;
+  }
+
 # Date Fields
 
   dimension: ticket_created_at_string {

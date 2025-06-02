@@ -144,11 +144,16 @@ view: wmp_bi_orders {
     type: count
     drill_fields: [seller_name, product_name]
   }
-  measure: gmv {
+
+  measure: GTV {
+    type: sum
+    sql: ${gtv_incl_gst} ;;
+  }
+  measure: GMV {
     type: sum
     sql: ${line_total_incl_gst} ;;
   }
-  measure: gfv {
+  measure: GFV {
     type: sum
     sql: ${shipping_fee_incl_gst} ;;
   }
