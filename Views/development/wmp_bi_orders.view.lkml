@@ -33,7 +33,7 @@ view: wmp_bi_orders {
   }
   dimension: commission_incl_gst {
     type: number
-    sql: ${TABLE}.commission_incl_gst ;;
+    sql: ${TABLE}.commission_incl_gst /1.1 ;;
   }
   dimension: courier {
     type: string
@@ -63,11 +63,11 @@ view: wmp_bi_orders {
   }
   dimension: gtv_incl_gst {
     type: number
-    sql: ${TABLE}.gtv_incl_gst ;;
+    sql: ${TABLE}.gtv_incl_gst /1.1 ;;
   }
   dimension: line_total_incl_gst {
     type: number
-    sql: ${TABLE}.line_total_incl_gst ;;
+    sql: ${TABLE}.line_total_incl_gst /1.1 ;;
   }
   dimension_group: order {
     type: time
@@ -114,11 +114,11 @@ view: wmp_bi_orders {
   }
   dimension: shipping_fee_incl_gst {
     type: number
-    sql: ${TABLE}.shipping_fee_incl_gst ;;
+    sql: ${TABLE}.shipping_fee_incl_gst /1.1 ;;
   }
   dimension: shipping_protection_incl_gst {
     type: number
-    sql: ${TABLE}.shipping_protection_incl_gst ;;
+    sql: ${TABLE}.shipping_protection_incl_gst /1.1 ;;
   }
   dimension: sku {
     type: string
@@ -130,7 +130,7 @@ view: wmp_bi_orders {
   }
   dimension: unit_price_incl_gst {
     type: number
-    sql: ${TABLE}.unit_price_incl_gst ;;
+    sql: ${TABLE}.unit_price_incl_gst /1.1 ;;
   }
   dimension: variant_description {
     type: string
@@ -147,15 +147,15 @@ view: wmp_bi_orders {
 
   measure: GTV {
     type: sum
-    sql: ${gtv_incl_gst} ;;
+    sql: ${gtv_incl_gst}/1.1 ;;
   }
   measure: GMV {
     type: sum
-    sql: ${line_total_incl_gst} ;;
+    sql: ${line_total_incl_gst}/1.1;;
   }
   measure: GFV {
     type: sum
-    sql: ${shipping_fee_incl_gst} ;;
+    sql: ${shipping_fee_incl_gst}/1.1 ;;
   }
   measure: order_count {
     type: count_distinct
