@@ -106,9 +106,9 @@ view: wmp_shipping {
 
 #start dev space
 
-  dimension: order_date {
+  dimension: shipment_first_attempted_at {
     type: string
-    sql: cast(${TABLE}.orderplaceddate as date) ;;
+    sql: cast(${TABLE}.shipmentDeliveryFirstAttemptedAt as date) ;;
   }
 
   parameter: timeframe_picker {
@@ -126,34 +126,34 @@ view: wmp_shipping {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${order_date} AS STRING
-    ELSE CAST(${order_date} AS STRING)
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${shipment_first_attempted_at} AS STRING
+    ELSE CAST(${shipment_first_attempted_at} AS STRING)
     END ;;
   }
 
   dimension: period {
     hidden: yes
     type: string
-    sql: case when ${order_date} >= ${filter_start_date_date} AND ${order_date} < ${filter_end_date_date} then 'CP'
-          when ${order_date} >= ${previous_start_date} AND ${order_date} < ${filter_start_date_date} then 'PP'
-          when ${order_date} >= ${previous_year_start_date} AND ${order_date} < ${previous_year_end_date}  then 'LY' end ;;
+    sql: case when ${shipment_first_attempted_at} >= ${filter_start_date_date} AND ${shipment_first_attempted_at} < ${filter_end_date_date} then 'CP'
+          when ${shipment_first_attempted_at} >= ${previous_start_date} AND ${shipment_first_attempted_at} < ${filter_start_date_date} then 'PP'
+          when ${shipment_first_attempted_at} >= ${previous_year_start_date} AND ${shipment_first_attempted_at} < ${previous_year_end_date}  then 'LY' end ;;
   }
 
   dimension: is_current_period {
     hidden: yes
     type: yesno
-    sql: ${order_date} >= ${filter_start_date_date} AND ${order_date} < ${filter_end_date_date} ;;
+    sql: ${shipment_first_attempted_at} >= ${filter_start_date_date} AND ${shipment_first_attempted_at} < ${filter_end_date_date} ;;
   }
 
   dimension: is_previous_period {
     hidden: yes
     type: yesno
-    sql: ${order_date} >= ${previous_start_date} AND ${order_date} < ${filter_start_date_date} ;;
+    sql: ${shipment_first_attempted_at} >= ${previous_start_date} AND ${shipment_first_attempted_at} < ${filter_start_date_date} ;;
   }
 
   dimension: day_of_week {
     label: "Day of Week_TransactionDate"
     type: string
-    sql: FORMAT_TIMESTAMP('%A', ${order_date}) ;;
+    sql: FORMAT_TIMESTAMP('%A', ${shipment_first_attempted_at}) ;;
   }
 }
