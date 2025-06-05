@@ -27,14 +27,14 @@ view: wmp_customer_service {
     sql: ${TABLE}.product_name ;;
   }
 
-  dimension: enquiry {
-    type: string
-    sql: ${TABLE}.enquiry ;;
-  }
-
   dimension: enquiry_type {
     type: string
     sql: ${TABLE}.enquiry_type ;;
+  }
+
+  dimension: enquiry_type_group {
+    type: string
+    sql: ${TABLE}.enquiry_type_group ;;
   }
 
   dimension: ticket_status {
