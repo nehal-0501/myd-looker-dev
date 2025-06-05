@@ -45,3 +45,8 @@ explore: WMP_Seller{
   label: "wmp seller"
   from: wmp_seller
 }
+
+explore: WMP_Shipping{
+  label: "wmp shipping"
+  from: wmp_shipping
+}
