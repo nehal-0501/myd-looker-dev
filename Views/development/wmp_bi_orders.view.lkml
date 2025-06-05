@@ -31,9 +31,9 @@ view: wmp_bi_orders {
     type: string
     sql: ${TABLE}.category_level_4 ;;
   }
-  dimension: commission_incl_gst {
+  dimension: expected_commission_incl_gst {
     type: number
-    sql: ${TABLE}.commission_incl_gst /1.1 ;;
+    sql: ${TABLE}.expected_commission_incl_gst /1.1 ;;
   }
   dimension: courier {
     type: string
@@ -166,10 +166,6 @@ view: wmp_bi_orders {
     sql: ${quantity} ;;
   }
 
-  measure: commission {
-    type: sum
-    sql: ${commission_incl_gst} ;;
-  }
 
   measure: unique_sku_sold {
     type: count_distinct
