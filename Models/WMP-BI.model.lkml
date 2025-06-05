@@ -9,9 +9,7 @@ explore: digital_sessions {
     sql: LEFT JOIN UNNEST(digital_sessions.product_interactions) as digital_session_product_interactions ;;
     relationship: one_to_many
   }
-
 }
-
 
 explore: seller_score {
   label: "wmp seller score"

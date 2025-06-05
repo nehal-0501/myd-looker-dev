@@ -1,6 +1,7 @@
 connection: "gcp-wow-wmp-ai-data-dev"
 include: "/Views/development/digital_sessions.view.lkml"
 include: "/Views/development/digital_session_product_interactions.view.lkml"
+include: "/Views/development/fct_digital_search_product_summary.view.lkml"
 
 
 explore: digital_sessions {
@@ -10,4 +11,9 @@ explore: digital_sessions {
     relationship: one_to_many
   }
 
+}
+
+explore: fct_digital_search_product_summary {
+  label: "Digital Search Product Summary"
+  from: fct_digital_search_product_summary
 }
