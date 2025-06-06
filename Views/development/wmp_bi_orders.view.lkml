@@ -155,7 +155,7 @@ view: wmp_bi_orders {
   }
   measure: GFV {
     type: sum
-    sql: ${shipping_fee_excl_gst} ;;
+    sql: ${shipping_fee_excl_gst} + ${shipping_protection_excl_gst} ;;
   }
   measure: order_count {
     type: count_distinct

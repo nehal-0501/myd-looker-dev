@@ -180,9 +180,16 @@ view: wmp_customer_service {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${contact_created_at} AS STRING
-    END ;;
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${contact_created_at} AS STRING END ;;
   }
+
+  dimension: dynamic_timeframe_test {
+    type: string
+    sql:
+    CASE
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_solved_at_string} AS STRING END ;;
+  }
+
 
   dimension: period {
     hidden: yes
@@ -212,12 +219,7 @@ view: wmp_customer_service {
 
 ## Add New Filter
 
-  dimension: dynamic_timeframe_test {
-    type: string
-    sql:
-    CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_solved_at_string} AS STRING END ;;
-  }
+
 
   dimension: period_test {
     hidden: yes

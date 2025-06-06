@@ -67,16 +67,53 @@ view: popanalysis {
     type: string
     case: {
       when: {
-        sql: ${period} = 'CP' or ${period_test} = 'CP';;
+        sql: ${period} = 'CP';;
         label: "Selected Period"
       }
       when: {
-        sql: ${period} = 'PP' or ${period_test} = 'PP';;
+        sql: ${period} = 'PP';;
         label: "Previous Period"
       }
       when: {
-        sql: ${period} = 'LY'or ${period_test} = 'LY';;
+        sql: ${period} = 'LY';;
         label: "Same Period Last Year"
+      }
+      else: "Not in time period"
+    }
+  }
+
+  dimension: timeframes_test {
+    view_label: "_PoP"
+    type: string
+    case: {
+      when: {
+        sql:  ${period_test} = 'CP';;
+        label: "Selected Period"
+      }
+      when: {
+        sql: ${period_test} = 'PP';;
+        label: "Previous Period"
+      }
+      when: {
+        sql: ${period_test} = 'LY';;
+        label: "Same Period Last Year"
+      }
+      else: "Not in time period"
+    }
+  }
+
+  dimension: timeframes_prior_period_test {
+    view_label: "_PoP"
+    type: string
+    hidden: yes
+    case: {
+      when: {
+        sql:  ${is_current_period_test} = true;;
+        label: "Selected Period"
+      }
+      when: {
+        sql:  ${is_previous_period_test} = true;;
+        label: "Previous Period"
       }
       else: "Not in time period"
     }
@@ -93,11 +130,11 @@ view: popanalysis {
     hidden: yes
     case: {
       when: {
-        sql: ${is_current_period} = true or ${is_current_period_test} = true;;
+        sql: ${is_current_period} = true ;;
         label: "Selected Period"
       }
       when: {
-        sql: ${is_previous_period} = true or ${is_previous_period_test} = true;;
+        sql: ${is_previous_period} = true ;;
         label: "Previous Period"
       }
       else: "Not in time period"
