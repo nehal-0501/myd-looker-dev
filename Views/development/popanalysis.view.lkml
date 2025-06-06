@@ -60,15 +60,15 @@ view: popanalysis {
     type: string
     case: {
       when: {
-        sql: ${period} = 'CP';;
+        sql: ${period} = 'CP' or ${period_test} = 'CP';;
         label: "Selected Period"
       }
       when: {
-        sql: ${period} = 'PP';;
+        sql: ${period} = 'PP' or ${period_test} = 'PP';;
         label: "Previous Period"
       }
       when: {
-        sql: ${period} = 'LY';;
+        sql: ${period} = 'LY'or ${period_test} = 'LY';;
         label: "Same Period Last Year"
       }
       else: "Not in time period"
@@ -86,11 +86,11 @@ view: popanalysis {
     hidden: yes
     case: {
       when: {
-        sql: ${is_current_period} = true;;
+        sql: ${is_current_period} = true or ${is_current_period_test} = true;;
         label: "Selected Period"
       }
       when: {
-        sql: ${is_previous_period} = true;;
+        sql: ${is_previous_period} = true or ${is_previous_period_test} = true;;
         label: "Previous Period"
       }
       else: "Not in time period"

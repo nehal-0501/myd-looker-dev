@@ -72,4 +72,37 @@ view: wmp_seller {
     type: string
     sql: FORMAT_TIMESTAMP('%A', ${created_date}) ;;
   }
+
+  dimension: dynamic_timeframe_test {
+    type: string
+    sql:
+    CASE
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${created_date} AS STRING END ;;
+  }
+
+  dimension: period_test {
+    hidden: yes
+    type: string
+    sql: case when ${created_date} >= ${filter_start_date_date} AND ${created_date} < ${filter_end_date_date} then 'CP'
+          when ${created_date} >= ${previous_start_date} AND ${created_date} < ${filter_start_date_date} then 'PP'
+          when ${created_date} >= ${previous_year_start_date} AND ${created_date} < ${previous_year_end_date}  then 'LY' end ;;
+  }
+
+  dimension: is_current_period_test {
+    hidden: yes
+    type: yesno
+    sql: ${created_date} >= ${filter_start_date_date} AND ${created_date} < ${filter_end_date_date} ;;
+  }
+
+  dimension: is_previous_period_test {
+    hidden: yes
+    type: yesno
+    sql: ${created_date} >= ${previous_start_date} AND ${created_date} < ${filter_start_date_date} ;;
+  }
+
+  dimension: day_of_week_test {
+    label: "Day of Week_TraderOrderDate"
+    type: string
+    sql: FORMAT_TIMESTAMP('%A', ${created_date}) ;;
+  }
 }
