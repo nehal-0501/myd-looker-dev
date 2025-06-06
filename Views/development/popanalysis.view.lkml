@@ -9,6 +9,13 @@ view: popanalysis {
     convert_tz: no
   }
 
+  filter: date_filter_test {
+    view_label: "_PoP"
+    description: "Use this date filter in combination with the timeframes dimension for dynamic date filtering"
+    type: date
+    convert_tz: no
+  }
+
   dimension_group: filter_start_date {
     hidden: yes
     type: time
