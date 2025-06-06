@@ -165,6 +165,10 @@ view: fct_digital_search_product_summary {
     type: count
   }
 
+  measure: unique_edm_products {
+    type: count_distinct
+  }
+
   # start dev space
 
   dimension: event_date_helper {

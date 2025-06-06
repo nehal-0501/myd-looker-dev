@@ -1,12 +1,12 @@
 include: "popanalysis.view"
 view: digital_sessions {
   extends: [popanalysis]
-  sql_table_name: `dbt_aitil.obt_digital_session_product_interactions` ;;
+  sql_table_name: `dbt_aitil.obt_digital_session_conversions` ;;
 
 
-  dimension: session_id {
+  dimension: dw_session_id {
     primary_key: yes
-    sql: ${TABLE}.session_id ;;
+    sql: ${TABLE}.dw_session_id ;;
   }
 
   dimension: user_id {
@@ -21,27 +21,27 @@ view: digital_sessions {
     description: "The unique session ID."
   }
 
-  dimension: session_key {
+  dimension: session_id {
     type: string
-    sql: ${TABLE}.session_key ;;
+    sql: ${TABLE}.session_id ;;
     description: "The unique session key."
   }
 
-  dimension: session_partition_key {
+  dimension: dw_session_partition_id {
     type: string
-    sql: ${TABLE}.session_partition_key ;;
+    sql: ${TABLE}.dw_session_partition_id ;;
     description: "The unique session partition ID."
   }
 
-  dimension: client_key {
+  dimension: dw_client_id {
     type: string
-    sql: ${TABLE}.client_key ;;
+    sql: ${TABLE}dw_.client_id ;;
     description: "The client ID."
   }
 
-  dimension: banner_key {
+  dimension: banner {
     type: string
-    sql: ${TABLE}.banner_key ;;
+    sql: ${TABLE}.banner ;;
     description: "The banner ID."
   }
 
@@ -135,7 +135,7 @@ view: digital_sessions {
 
   measure: session_count {
     type: count_distinct
-    sql: ${session_key}  ;;
+    sql: ${session_id}  ;;
     description: "The number of sessions."
   }
 

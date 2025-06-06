@@ -2,12 +2,14 @@ view: digital_session_product_interactions {
 
   dimension: id {
     primary_key: yes
-    sql: CONCAT(${digital_session.session_key AS STRING),'|', CAST(${product_id}) ;;
+    sql: CONCAT(${digital_session.session_id AS STRING),'|', CAST(${product_id}) ;;
   }
 
   dimension: seller_id {}
 
   dimension: product_id {}
+
+  dimension: banner_product_id {}
 
   dimension: article_id {}
 
@@ -39,7 +41,7 @@ view: digital_session_product_interactions {
   measure: total_product_impressions {
     type: sum
     sql: ${product_impressions} ;;
-    drill_fields: [digital_session.session_key]
+    drill_fields: [digital_session.session_id]
   }
 
 }
