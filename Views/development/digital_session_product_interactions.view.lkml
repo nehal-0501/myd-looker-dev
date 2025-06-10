@@ -38,6 +38,36 @@ view: digital_session_product_interactions {
     type: number
   }
 
+  measure: intentful_sessions{
+    type: count_distinct
+    sql: case when ${product_impressions} > 0 then ${digital_sessions.session_id} end ;;
+    drill_fields: [digital_session.session_id]
+  }
+
+  measure: pdp_sessions{
+    type: count_distinct
+    sql: case when ${product_views} > 0 then ${digital_sessions.session_id} end ;;
+    drill_fields: [digital_session.session_id]
+  }
+
+  measure: add_to_cart_sessions{
+    type: count_distinct
+    sql: case when ${add_to_carts} > 0 then ${digital_sessions.session_id} end ;;
+    drill_fields: [digital_session.session_id]
+  }
+
+  measure: checkout_sessions{
+    type: count_distinct
+    sql: case when ${begin_checkouts} > 0 then ${digital_sessions.session_id} end ;;
+    drill_fields: [digital_session.session_id]
+  }
+
+  measure: purchase_sessions{
+    type: count_distinct
+    sql: case when ${purchases} > 0 then ${digital_sessions.session_id} end ;;
+    drill_fields: [digital_session.session_id]
+  }
+
   measure: total_product_impressions {
     type: sum
     sql: ${product_impressions} ;;
