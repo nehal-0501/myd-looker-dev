@@ -48,3 +48,8 @@ explore: WMP_Shipping{
   label: "wmp shipping"
   from: wmp_shipping
 }
+
+explore: digital_search_product_summary {
+  label: "Digital - Search Product Summary"
+  from: fct_digital_search_product_summary
+}

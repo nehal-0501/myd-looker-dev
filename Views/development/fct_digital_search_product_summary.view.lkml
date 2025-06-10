@@ -165,8 +165,19 @@ view: fct_digital_search_product_summary {
     type: count
   }
 
+  measure: count_search_activity_edm {
+    type: sum
+    sql: case when ${product_id} is not null then ${impression_sessions} else 0 end ;;
+  }
+
+  measure: count_search_activity {
+    type: sum
+    sql: ${impression_sessions} ;;
+  }
+
   measure: unique_edm_products {
     type: count_distinct
+    sql: ${product_id} ;;
   }
 
   # start dev space
@@ -192,7 +203,7 @@ view: fct_digital_search_product_summary {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${event_date_helper} AS STRING
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${event_date_helper} AS STRING)
     ELSE CAST(${event_date_helper} AS STRING)
     END ;;
   }
