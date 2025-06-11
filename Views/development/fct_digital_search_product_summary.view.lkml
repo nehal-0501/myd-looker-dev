@@ -161,6 +161,13 @@ view: fct_digital_search_product_summary {
     description: "The normalized search term entered by the user."
     sql: ${TABLE}.search_keyword ;;
   }
+
+  dimension: is_marketplus_product {
+    type: yesno
+    description: "Whether the product is 3P or not?"
+    sql: ${TABLE}.is_marketplus_product ;;
+  }
+
   measure: count {
     type: count
   }
