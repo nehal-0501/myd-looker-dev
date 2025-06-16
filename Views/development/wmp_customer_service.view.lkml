@@ -180,14 +180,14 @@ view: wmp_customer_service {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${contact_created_at} AS STRING END ;;
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${contact_created_at} AS STRING )END ;;
   }
 
   dimension: dynamic_timeframe_test {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_solved_at_string} AS STRING END ;;
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${ticket_solved_at_string} AS STRING ) END ;;
   }
 
 
@@ -224,21 +224,21 @@ view: wmp_customer_service {
   dimension: period_test {
     hidden: yes
     type: string
-    sql: case when ${ticket_solved_at_string} >= ${filter_start_date_date} AND ${ticket_solved_at_string} < ${filter_end_date_date} then 'CP'
-          when ${ticket_solved_at_string} >= ${previous_start_date} AND ${ticket_solved_at_string} < ${filter_start_date_date} then 'PP'
-          when ${ticket_solved_at_string} >= ${previous_year_start_date} AND ${ticket_solved_at_string} < ${previous_year_end_date}  then 'LY' end ;;
+    sql: case when ${ticket_solved_at_string} >= ${filter_start_date_test_date} AND ${ticket_solved_at_string} < ${filter_end_date_test_date} then 'CP'
+          when ${ticket_solved_at_string} >= ${previous_start_date_test} AND ${ticket_solved_at_string} < ${filter_start_date_test_date} then 'PP'
+          when ${ticket_solved_at_string} >= ${previous_year_start_date_test} AND ${ticket_solved_at_string} < ${previous_year_end_date_test}  then 'LY' end ;;
   }
 
   dimension: is_current_period_test {
     hidden: yes
     type: yesno
-    sql: ${ticket_solved_at_string} >= ${filter_start_date_date} AND ${ticket_solved_at_string} < ${filter_end_date_date} ;;
+    sql: ${ticket_solved_at_string} >= ${filter_start_date_test_date} AND ${ticket_solved_at_string} < ${filter_end_date_test_date}date} ;;
   }
 
   dimension: is_previous_period_test {
     hidden: yes
     type: yesno
-    sql: ${ticket_solved_at_string} >= ${previous_start_date} AND ${ticket_solved_at_string} < ${filter_start_date_date} ;;
+    sql: ${ticket_solved_at_string} >= ${previous_start_date_test} AND ${ticket_solved_at_string} < ${filter_start_date_test_date} ;;
   }
 
   dimension: day_of_week_test {

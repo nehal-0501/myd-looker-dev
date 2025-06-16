@@ -32,10 +32,36 @@ view: popanalysis {
     sql: case when {% date_end date_filter %} IS NULL THEN CURRENT_DATE('Australia/Melbourne') ELSE DATE({% date_end date_filter %}, 'Australia/Melbourne') END ;;
   }
 
+# --- NEW: filter_start_date for 'test' fields ---
+  dimension_group: filter_start_date_test {
+    hidden: yes # Keep this hidden as it's a derived value
+    type: time
+    timeframes: [raw,date]
+    convert_tz: no
+    sql: case when {% date_start date_filter_test %} IS NULL THEN '2021-03-06' ELSE DATE({% date_start date_filter_test %}, 'Australia/Melbourne') END  ;;
+  }
+
+  # --- NEW: filter_end_date for 'test' fields ---
+  dimension_group: filter_end_date_test {
+    hidden: yes # Keep this hidden
+    type: time
+    timeframes: [raw,date]
+    convert_tz: no
+    sql: case when {% date_end date_filter_test %} IS NULL THEN CURRENT_DATE('Australia/Melbourne') ELSE DATE({% date_end date_filter_test %}, 'Australia/Melbourne') END ;;
+  }
+
+
   dimension: interval {
     hidden: yes
     type: number
     sql: DATE_DIFF(${filter_start_date_date},${filter_end_date_date},DAY) ;;
+  }
+
+# --- NEW: interval for 'test' fields ---
+  dimension: interval_test {
+    hidden: yes
+    type: number
+    sql: DATE_DIFF(${filter_start_date_test_date},${filter_end_date_test_date},DAY) ;;
   }
 
   dimension: previous_start_date {
@@ -44,6 +70,11 @@ view: popanalysis {
     sql: DATE_ADD(CAST(${filter_start_date_date} AS date),INTERVAL ${interval} DAY) ;;
   }
 
+  dimension: previous_start_date_test {
+    hidden: yes
+    type: string
+    sql: DATE_ADD(CAST(${filter_start_date_test_date} AS date),INTERVAL ${interval_test} DAY) ;;
+  }
 
 
   #start dev space
@@ -54,11 +85,25 @@ view: popanalysis {
     sql: DATE_ADD(CAST(${filter_start_date_date} AS date),INTERVAL -1 YEAR) ;;
   }
 
+  dimension: previous_year_start_date_test {
+    view_label: "_PoP"
+    hidden: yes
+    type: string
+    sql: DATE_ADD(CAST(${filter_start_date_test_date} AS date),INTERVAL -1 YEAR) ;;
+  }
+
   dimension: previous_year_end_date {
     view_label: "_PoP"
     hidden: yes
     type: string
     sql: DATE_ADD(CAST(${filter_end_date_date} AS date),INTERVAL -1 YEAR) ;;
+  }
+
+  dimension: previous_year_end_date_test {
+    view_label: "_PoP"
+    hidden: yes
+    type: string
+    sql: DATE_ADD(CAST(${filter_end_date_test_date} AS date),INTERVAL -1 YEAR) ;;
   }
 
 
