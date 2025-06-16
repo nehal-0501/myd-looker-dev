@@ -7,11 +7,11 @@ view: wmp_seller {
     type: string
     sql: ${TABLE}.crm_seller_id ;;
   }
-  dimension_group: launched {
+  dimension_group: created {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     datatype: datetime
-    sql: ${TABLE}.launched_at ;;
+    sql: ${TABLE}.created_at ;;
   }
   measure: count {
     type: count
@@ -22,9 +22,9 @@ view: wmp_seller {
   }
 #start dev space
 
-  dimension: created_date {
+  dimension: created_at {
     type: string
-    sql: cast(${TABLE}.launched_at as date) ;;
+    sql: cast(${TABLE}.created_at as date) ;;
   }
 
   parameter: timeframe_picker {
@@ -50,59 +50,59 @@ view: wmp_seller {
   dimension: period {
     hidden: yes
     type: string
-    sql: case when ${created_date} >= ${filter_start_date_date} AND ${created_date} < ${filter_end_date_date} then 'CP'
-          when ${created_date} >= ${previous_start_date} AND ${created_date} < ${filter_start_date_date} then 'PP'
-          when ${created_date} >= ${previous_year_start_date} AND ${created_date} < ${previous_year_end_date}  then 'LY' end ;;
+    sql: case when ${created_at} >= ${filter_start_date_date} AND ${created_at} < ${filter_end_date_date} then 'CP'
+          when ${created_at} >= ${previous_start_date} AND ${created_at} < ${filter_start_date_date} then 'PP'
+          when ${created_at} >= ${previous_year_start_date} AND ${created_at} < ${previous_year_end_date}  then 'LY' end ;;
   }
 
   dimension: is_current_period {
     hidden: yes
     type: yesno
-    sql: ${created_date} >= ${filter_start_date_date} AND ${created_date} < ${filter_end_date_date} ;;
+    sql: ${created_at} >= ${filter_start_date_date} AND ${created_at} < ${filter_end_date_date} ;;
   }
 
   dimension: is_previous_period {
     hidden: yes
     type: yesno
-    sql: ${created_date} >= ${previous_start_date} AND ${created_date} < ${filter_start_date_date} ;;
+    sql: ${created_at} >= ${previous_start_date} AND ${created_at} < ${filter_start_date_date} ;;
   }
 
   dimension: day_of_week {
     label: "Day of Week_TransactionDate"
     type: string
-    sql: FORMAT_TIMESTAMP('%A', ${created_date}) ;;
+    sql: FORMAT_TIMESTAMP('%A', ${created_at}) ;;
   }
 
   dimension: dynamic_timeframe_test {
     type: string
     sql:
     CASE
-    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${created_date} AS STRING END ;;
+    WHEN {% parameter timeframe_picker %} = 'Date' THEN CAST(${created_at} AS STRING END ;;
   }
 
   dimension: period_test {
     hidden: yes
     type: string
-    sql: case when ${created_date} >= ${filter_start_date_date} AND ${created_date} < ${filter_end_date_date} then 'CP'
-          when ${created_date} >= ${previous_start_date} AND ${created_date} < ${filter_start_date_date} then 'PP'
-          when ${created_date} >= ${previous_year_start_date} AND ${created_date} < ${previous_year_end_date}  then 'LY' end ;;
+    sql: case when ${created_at} >= ${filter_start_date_date} AND ${created_at} < ${filter_end_date_date} then 'CP'
+          when ${created_at} >= ${previous_start_date} AND ${created_at} < ${filter_start_date_date} then 'PP'
+          when ${created_at} >= ${previous_year_start_date} AND ${created_at} < ${previous_year_end_date}  then 'LY' end ;;
   }
 
   dimension: is_current_period_test {
     hidden: yes
     type: yesno
-    sql: ${created_date} >= ${filter_start_date_date} AND ${created_date} < ${filter_end_date_date} ;;
+    sql: ${created_at} >= ${filter_start_date_date} AND ${created_at} < ${filter_end_date_date} ;;
   }
 
   dimension: is_previous_period_test {
     hidden: yes
     type: yesno
-    sql: ${created_date} >= ${previous_start_date} AND ${created_date} < ${filter_start_date_date} ;;
+    sql: ${created_at} >= ${previous_start_date} AND ${created_at} < ${filter_start_date_date} ;;
   }
 
   dimension: day_of_week_test {
     label: "Day of Week_TraderOrderDate"
     type: string
-    sql: FORMAT_TIMESTAMP('%A', ${created_date}) ;;
+    sql: FORMAT_TIMESTAMP('%A', ${created_at}) ;;
   }
 }
