@@ -152,12 +152,12 @@ view: wmp_customer_service {
 
   measure: positive_csat_response {
     type: count_distinct
-    sql: case when ${valid_ticket} and ${csat_score} = 'good' then ${ticket_id} end  ;;
+    sql: case when ${valid_ticket_all} and ${csat_score} = 'good' then ${ticket_id} end  ;;
   }
 
   measure: total_csat_response {
     type: count_distinct
-    sql: case  when ${valid_ticket} and ${_is_csat_survey_completed} then ${ticket_id} end  ;;
+    sql: case  when ${valid_ticket_all} and ${_is_csat_survey_completed} then ${ticket_id} end  ;;
   }
 
   measure: call_count {
