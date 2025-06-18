@@ -126,10 +126,12 @@ view: wmp_customer_service {
     type: yesno
     sql: ${TABLE}.valid_ticket_all ;;
   }
+
   dimension: valid_escalation_ticket {
     type: yesno
     sql: ${TABLE}.valid_escalation_ticket ;;
   }
+
   dimension: valid_ticket {
     type: yesno
     sql: ${TABLE}.valid_ticket ;;
