@@ -53,3 +53,8 @@ explore: digital_search_product_summary {
   label: "Digital - Search Product Summary"
   from: fct_digital_search_product_summary
 }
+
+explore: WMP_Design{
+  label: "wmp design"
+  from: wmp_design
+}
