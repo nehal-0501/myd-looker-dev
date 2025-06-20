@@ -57,6 +57,13 @@ view: popanalysis {
     sql: DATE_DIFF(${filter_start_date_date},${filter_end_date_date},DAY) ;;
   }
 
+
+  dimension: previous_start_date {
+    hidden: yes
+    type: string
+    sql: DATE_ADD(CAST(${filter_start_date_date} AS date),INTERVAL ${interval} DAY) ;;
+  }
+
 # --- NEW: interval for 'test' fields ---
   dimension: interval_test {
     hidden: yes
@@ -64,10 +71,10 @@ view: popanalysis {
     sql: DATE_DIFF(${filter_start_date_test_date},${filter_end_date_test_date},DAY) ;;
   }
 
-  dimension: previous_start_date {
+  dimension: previous_end_date {
     hidden: yes
     type: string
-    sql: DATE_ADD(CAST(${filter_start_date_date} AS date),INTERVAL ${interval} DAY) ;;
+    sql: DATE_ADD(CAST(${filter_end_date_date} AS date),INTERVAL ${interval} DAY) ;;
   }
 
   dimension: previous_start_date_test {

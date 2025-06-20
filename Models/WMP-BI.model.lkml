@@ -58,3 +58,8 @@ explore: WMP_Design{
   label: "wmp design"
   from: wmp_design
 }
+
+explore: wmp_product_daily{
+  label: "wmp product daily"
+  from: wmp_product_daily
+}
